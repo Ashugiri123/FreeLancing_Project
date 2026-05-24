@@ -1,134 +1,56 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { AppShell } from "../../components/layout/AppShell.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { freelancerDomains } from "../../data/freelancerDomains.js";
 
-const TRENDING_SKILLS = [
-  "Web Development",
-  "Graphic Design",
-  "Video Editing",
-  "UI/UX",
-  "Content Writing"
-];
-
-const SKILL_GUIDANCE = {
-  "Web Development": {
-    requiredSkills: ["HTML, CSS, JavaScript", "Responsive layouts", "React basics", "APIs and forms"],
-    tools: ["VS Code", "GitHub", "Chrome DevTools", "Figma"],
-    roadmap: ["Build a personal page", "Recreate 2 landing pages", "Create a small React app", "Deploy a portfolio site"],
-    projects: ["College club website", "Product listing page", "Restaurant landing page", "Dashboard UI clone"],
-    opportunities: ["Landing pages for sellers", "Portfolio sites for students", "Event registration pages", "Small business catalog pages"],
-    pricing: ["Beginner: Rs 500-1,500 per page", "Intermediate: Rs 3,000-8,000 per site", "Charge extra for forms, hosting setup, or urgent delivery"],
-    resources: ["MDN Web Docs", "freeCodeCamp", "React.dev", "Frontend Mentor"]
-  },
-  "Graphic Design": {
-    requiredSkills: ["Typography", "Color theory", "Layout systems", "Brand consistency"],
-    tools: ["Canva", "Figma", "Adobe Photoshop", "Adobe Illustrator"],
-    roadmap: ["Study 5 strong posters", "Design social posts", "Make logo variations", "Create a mini brand kit"],
-    projects: ["Instagram carousel", "Event poster", "Business card set", "Brand moodboard"],
-    opportunities: ["Club event posters", "Seller product graphics", "Logo refreshes", "Social media post packs"],
-    pricing: ["Beginner: Rs 150-400 per post", "Poster packs: Rs 500-1,200", "Brand kits: Rs 1,500-4,000"],
-    resources: ["Canva Design School", "Figma Learn", "The Futur", "Adobe tutorials"]
-  },
-  "Video Editing": {
-    requiredSkills: ["Story pacing", "Cuts and transitions", "Audio cleanup", "Caption design"],
-    tools: ["CapCut", "Premiere Pro", "DaVinci Resolve", "Canva"],
-    roadmap: ["Edit short reels", "Practice captions", "Create before/after edits", "Build a 30-second promo"],
-    projects: ["Product reel", "Event recap", "YouTube intro", "Educational short"],
-    opportunities: ["Reels for student sellers", "Event recap edits", "Course explainers", "Product launch videos"],
-    pricing: ["Beginner: Rs 300-800 per short video", "Monthly reel packs: Rs 2,000-5,000", "Add-ons: subtitles, thumbnails, rush delivery"],
-    resources: ["CapCut tutorials", "DaVinci Resolve training", "Premiere Pro Learn", "YouTube Creator Academy"]
-  },
-  "UI/UX": {
-    requiredSkills: ["User flows", "Wireframing", "Visual hierarchy", "Usability testing"],
-    tools: ["Figma", "FigJam", "Notion", "Maze"],
-    roadmap: ["Redesign one app screen", "Map a checkout flow", "Prototype a dashboard", "Test with 3 friends"],
-    projects: ["App onboarding", "Checkout redesign", "Student dashboard", "Case study with decisions"],
-    opportunities: ["App screen redesigns", "Clickable prototypes", "Landing page wireframes", "Usability audit reports"],
-    pricing: ["Beginner: Rs 700-1,500 per screen", "Prototype flows: Rs 2,500-6,000", "Offer audit + redesign bundles"],
-    resources: ["Figma Learn", "Nielsen Norman Group", "Laws of UX", "UX Collective"]
-  },
-  "Content Writing": {
-    requiredSkills: ["Clear structure", "Research", "SEO basics", "Editing and tone"],
-    tools: ["Google Docs", "Grammarly", "Notion", "Google Trends"],
-    roadmap: ["Write daily summaries", "Create 3 blog drafts", "Rewrite product descriptions", "Pitch short articles"],
-    projects: ["Blog post set", "Product descriptions", "LinkedIn posts", "Email newsletter sample"],
-    opportunities: ["Product descriptions", "Blog writing", "LinkedIn content", "Email announcements"],
-    pricing: ["Beginner: Rs 250-700 per short article", "Product copy packs: Rs 500-1,500", "Charge more for research-heavy topics"],
-    resources: ["Google Search Central", "HubSpot Blog", "Grammarly Handbook", "Copyblogger"]
-  }
-};
-
-const SUGGESTED_FREELANCERS = [
+const benefits = [
   {
-    name: "Aarav Mehta",
-    skill: "Web Development",
-    rating: "4.9",
-    pricing: "Rs 900/project",
-    bio: "Builds responsive storefronts and student portfolio sites with clean React interfaces.",
-    image: "https://i.pravatar.cc/180?img=11"
+    title: "Start with guided confidence",
+    detail: "Explore domains before committing, understand what to learn, and choose a path that matches your strengths."
   },
   {
-    name: "Nisha Rao",
-    skill: "Graphic Design",
-    rating: "4.8",
-    pricing: "Rs 350/design",
-    bio: "Creates posters, brand kits, and social media creatives for campus sellers.",
-    image: "https://i.pravatar.cc/180?img=47"
+    title: "Turn learning into proof",
+    detail: "Use projects, portfolios, and campus work samples to show clients what you can actually deliver."
   },
   {
-    name: "Kabir Sethi",
-    skill: "Video Editing",
-    rating: "4.7",
-    pricing: "Rs 650/video",
-    bio: "Edits reels, promo clips, and product demos with fast captions and clean pacing.",
-    image: "https://i.pravatar.cc/180?img=15"
-  },
-  {
-    name: "Meera Shah",
-    skill: "UI/UX",
-    rating: "4.9",
-    pricing: "Rs 1,200/project",
-    bio: "Designs app flows, clickable prototypes, and modern dashboards for early products.",
-    image: "https://i.pravatar.cc/180?img=32"
-  },
-  {
-    name: "Rohan Iyer",
-    skill: "Content Writing",
-    rating: "4.6",
-    pricing: "Rs 450/article",
-    bio: "Writes product copy, blog posts, and social content with student-friendly clarity.",
-    image: "https://i.pravatar.cc/180?img=53"
-  },
-  {
-    name: "Anika Verma",
-    skill: "Web Development",
-    rating: "4.8",
-    pricing: "Rs 700/page",
-    bio: "Turns Figma screens into polished landing pages for shops, clubs, and founders.",
-    image: "https://i.pravatar.cc/180?img=5"
+    title: "Practice in a student marketplace",
+    detail: "UNIVENDA gives students a safer place to test services, pricing, communication, and delivery habits."
   }
 ];
 
-const HELP_CARDS = [
+const growthCards = [
+  "Build portfolio-ready projects from real needs",
+  "Learn how to package your skill into a sellable service",
+  "Understand beginner pricing before talking to clients",
+  "Discover tools and resources for each career path"
+];
+
+const learningCards = [
   {
-    title: "How to start freelancing",
-    detail: "Pick one service, define a simple price, and offer a small first project you can finish in 2-3 days."
+    title: "Explore",
+    detail: "Compare domains and see where your interests, tools, and earning goals overlap."
   },
   {
-    title: "How to get your first client",
-    detail: "Message classmates, clubs, and local sellers with one clear offer and a sample of your work."
+    title: "Practice",
+    detail: "Follow beginner projects that are small enough to finish and strong enough to showcase."
   },
   {
-    title: "How to build a portfolio",
-    detail: "Show 3 focused projects with the problem, your role, tools used, and a visual before-and-after."
-  },
-  {
-    title: "How to sell products on UNIVENDA",
-    detail: "Add strong photos, honest pricing, delivery details, and a short description that answers buyer questions."
+    title: "Publish",
+    detail: "Create samples, list your service, and improve from feedback instead of waiting to feel perfect."
   }
+];
+
+const successSteps = [
+  "Choose one domain",
+  "Finish two starter projects",
+  "Create a clean portfolio proof",
+  "Offer a small paid service on UNIVENDA"
 ];
 
 export function FreelancerListingPage() {
-  const [skill, setSkill] = useState("");
+  const { user } = useAuth();
+  const [query, setQuery] = useState("");
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const searchRef = useRef(null);
 
@@ -143,61 +65,35 @@ export function FreelancerListingPage() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const matchingSuggestions = useMemo(() => {
-    const normalizedSkill = skill.trim().toLowerCase();
+  const matchingDomains = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
 
-    if (!normalizedSkill) {
-      return TRENDING_SKILLS;
+    if (!normalizedQuery) {
+      return freelancerDomains;
     }
 
-    return TRENDING_SKILLS.filter((suggestion) => suggestion.toLowerCase().includes(normalizedSkill));
-  }, [skill]);
-
-  const activeSkill = useMemo(() => {
-    const normalizedSkill = skill.trim().toLowerCase();
-
-    if (!normalizedSkill) {
-      return "Web Development";
-    }
-
-    return TRENDING_SKILLS.find((item) => item.toLowerCase().includes(normalizedSkill)) || null;
-  }, [skill]);
-
-  const guidance = activeSkill ? SKILL_GUIDANCE[activeSkill] : null;
-
-  const filteredFreelancers = useMemo(() => {
-    const normalizedSkill = skill.trim().toLowerCase();
-
-    if (!normalizedSkill) {
-      return SUGGESTED_FREELANCERS;
-    }
-
-    return SUGGESTED_FREELANCERS.filter((freelancer) => freelancer.skill.toLowerCase().includes(normalizedSkill));
-  }, [skill]);
-
-  function selectSkill(nextSkill) {
-    setSkill(nextSkill);
-    setIsSuggestionsOpen(false);
-  }
+    return freelancerDomains.filter((domain) => domain.name.toLowerCase().includes(normalizedQuery));
+  }, [query]);
 
   return (
     <AppShell title="Freelancers">
-      <div className="freelancers-page">
-        <section className="freelancers-hero">
+      <div className="freelancers-page career-hub-page">
+        <section className="freelancers-hero career-hero">
           <div className="freelancers-hero-copy">
-            <h2>Find skilled student freelancers and learn what each skill takes.</h2>
+            <h2>Explore careers, learn the path, and grow into a student freelancer.</h2>
             <p>
-              Search by skill, explore beginner guidance, and compare suggested freelancers before starting a project.
+              Pick a domain when you are ready. Until then, use UNIVENDA to understand opportunities, learning paths,
+              project ideas, and how students can turn skills into paid services.
             </p>
           </div>
           <div className="freelancers-search-card" ref={searchRef}>
             <label className="field">
-              <span>Search freelancers by skill</span>
+              <span>Search a career domain</span>
               <input
                 type="search"
-                value={skill}
+                value={query}
                 onChange={(event) => {
-                  setSkill(event.target.value);
+                  setQuery(event.target.value);
                   setIsSuggestionsOpen(true);
                 }}
                 onFocus={() => setIsSuggestionsOpen(true)}
@@ -206,131 +102,113 @@ export function FreelancerListingPage() {
                 autoComplete="off"
               />
             </label>
-            {isSuggestionsOpen && matchingSuggestions.length > 0 && (
-              <div className="suggestions-dropdown" role="listbox" aria-label="Skill suggestions">
-                {matchingSuggestions.map((suggestion) => (
-                  <button
+            {isSuggestionsOpen && matchingDomains.length > 0 && (
+              <div className="suggestions-dropdown" role="listbox" aria-label="Career domain suggestions">
+                {matchingDomains.map((domain) => (
+                  <Link
                     className="suggestion-item"
-                    type="button"
                     role="option"
-                    key={suggestion}
-                    onClick={() => selectSkill(suggestion)}
+                    key={domain.slug}
+                    to={`/freelancers/${domain.slug}`}
+                    onClick={() => setIsSuggestionsOpen(false)}
                   >
-                    <strong>{suggestion}</strong>
-                    <span>View freelancers and beginner guidance</span>
-                  </button>
+                    <strong>{domain.name}</strong>
+                    <span>Open detailed learning and earning guide</span>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
         </section>
 
-        <section className="panel freelancers-trending-panel">
+        <section className="career-section-grid">
+          {benefits.map((benefit) => (
+            <article className="career-info-card" key={benefit.title}>
+              <span>{benefit.title.slice(0, 2).toUpperCase()}</span>
+              <h3>{benefit.title}</h3>
+              <p>{benefit.detail}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="panel career-panel">
           <div className="compact-section-head">
-            <h2>Trending Skills</h2>
-            <p>Choose a skill to update guidance and freelancer results.</p>
+            <h2>Student Growth Opportunities</h2>
+            <p>Build confidence before you sell. Every domain guide is designed for students starting from zero.</p>
           </div>
-          <div className="trending-skill-grid">
-            {TRENDING_SKILLS.map((trendingSkill) => (
-              <button
-                className={`trending-skill-card ${activeSkill === trendingSkill ? "active" : ""}`}
-                type="button"
-                key={trendingSkill}
-                onClick={() => selectSkill(trendingSkill)}
-              >
-                <span>{trendingSkill.slice(0, 2).toUpperCase()}</span>
-                <strong>{trendingSkill}</strong>
-                <small>{SUGGESTED_FREELANCERS.filter((item) => item.skill === trendingSkill).length} freelancers</small>
-              </button>
+          <div className="growth-opportunity-grid">
+            {growthCards.map((item) => (
+              <div className="growth-opportunity" key={item}>
+                <span />
+                <strong>{item}</strong>
+              </div>
             ))}
           </div>
         </section>
 
         <div className="freelancers-main-grid">
-          <section className="panel skill-guidance-panel">
+          <section className="panel career-panel">
             <div className="compact-section-head">
-              <h2>Skill Guidance</h2>
-              <p>{activeSkill ? `Starter roadmap for ${activeSkill}.` : "Search a trending skill to see a focused roadmap."}</p>
+              <h2>Learning Experience</h2>
+              <p>UNIVENDA turns career discovery into a practical loop.</p>
             </div>
-            {guidance ? (
-              <div className="guidance-grid">
-                <GuidanceList title="Required skills" items={guidance.requiredSkills} />
-                <GuidanceList title="Recommended tools" items={guidance.tools} />
-                <GuidanceList title="Beginner roadmap" items={guidance.roadmap} />
-                <GuidanceList title="Suggested projects" items={guidance.projects} />
-                <GuidanceList title="Freelance opportunities" items={guidance.opportunities} />
-                <GuidanceList title="Beginner pricing guidance" items={guidance.pricing} />
-                <GuidanceList title="Learning resources" items={guidance.resources} />
-              </div>
-            ) : (
-              <p className="empty-state">No temporary guidance is available for that skill yet.</p>
-            )}
-          </section>
-
-          <section className="panel beginner-help-panel">
-            <div className="compact-section-head">
-              <h2>Beginner Help</h2>
-              <p>Quick advice for getting started on UNIVENDA.</p>
-            </div>
-            <div className="help-card-grid">
-              {HELP_CARDS.map((card) => (
-                <article className="help-card" key={card.title}>
+            <div className="learning-card-grid">
+              {learningCards.map((card) => (
+                <article className="learning-card" key={card.title}>
                   <strong>{card.title}</strong>
                   <p>{card.detail}</p>
                 </article>
               ))}
             </div>
           </section>
+
+          <section className="panel career-panel">
+            <div className="compact-section-head">
+              <h2>Success Path</h2>
+              <p>A simple route from curious student to first service listing.</p>
+            </div>
+            <ol className="success-path-list">
+              {successSteps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          </section>
         </div>
 
-        <section className="panel suggested-freelancers-panel">
+        <section className="panel freelancers-trending-panel">
           <div className="section-head compact-section-head">
             <div>
-              <h2>Suggested Freelancers</h2>
-              <p>{filteredFreelancers.length} matching profiles from temporary sample data.</p>
+              <h2>Featured Domains</h2>
+              <p>Open a domain page to see skills, tools, roadmap, projects, pricing, and growth guidance.</p>
             </div>
-            {skill && (
-              <button className="secondary-button" onClick={() => setSkill("")}>
-                Clear search
-              </button>
-            )}
+            <span className="result-count">{freelancerDomains.length} guides</span>
           </div>
-          <div className="suggested-freelancer-grid">
-            {filteredFreelancers.map((freelancer) => (
-              <article className="suggested-freelancer-card" key={freelancer.name}>
-                <img src={freelancer.image} alt={`${freelancer.name} profile`} />
-                <div className="suggested-freelancer-copy">
-                  <div>
-                    <strong>{freelancer.name}</strong>
-                    <span>{freelancer.skill}</span>
-                  </div>
-                  <p>{freelancer.bio}</p>
-                  <div className="freelancer-card-footer">
-                    <span>Rating {freelancer.rating}</span>
-                    <strong>{freelancer.pricing}</strong>
-                  </div>
+          <div className="domain-card-grid">
+            {freelancerDomains.map((domain) => (
+              <Link className="domain-card" to={`/freelancers/${domain.slug}`} key={domain.slug}>
+                <span>{domain.initials}</span>
+                <div>
+                  <strong>{domain.name}</strong>
+                  <p>{domain.impact}</p>
                 </div>
-              </article>
+                <small>Explore guide</small>
+              </Link>
             ))}
-            {filteredFreelancers.length === 0 && (
-              <p className="empty-state">No suggested freelancers match this skill yet.</p>
-            )}
           </div>
         </section>
+
+        {!user ? (
+          <section className="register-cta-panel">
+            <div>
+              <h2>Ready to turn learning into earning?</h2>
+              <p>Register as a student to build your profile, list services, and start growing on UNIVENDA.</p>
+            </div>
+            <Link className="primary-button" to="/register/student">
+              Register Now
+            </Link>
+          </section>
+        ) : null}
       </div>
     </AppShell>
-  );
-}
-
-function GuidanceList({ title, items }) {
-  return (
-    <article className="guidance-card">
-      <h3>{title}</h3>
-      <ul>
-        {items.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-    </article>
   );
 }
