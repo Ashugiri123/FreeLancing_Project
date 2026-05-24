@@ -118,7 +118,7 @@ export function CustomerDashboard() {
           </div>
           <div className="product-grid">
             {products.map((product) => (
-              <Link className="product-card" to={`/products/${product._id}`} key={product._id}>
+              <Link className="product-card" to={`/products/item/${product._id}`} key={product._id}>
                 <div className="product-thumb">
                   {product.images?.[0] ? <img src={product.images[0]} alt={product.title} /> : <span>{product.category}</span>}
                 </div>

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { AppShell } from "../../components/layout/AppShell.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { supabase } from "../../config/supabase.js";
+import { products } from "../../data/staticProducts.js";
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -11,6 +12,21 @@ export function ProductDetailPage() {
 
   useEffect(() => {
     async function loadProduct() {
+      const staticProduct = products.find((item) => item._id === id);
+
+      if (staticProduct) {
+        setProduct({
+          ...staticProduct,
+          images: [staticProduct.image],
+          description: `${staticProduct.title} is a temporary marketplace listing from ${staticProduct.sellerName}. Backend product details will be connected later.`,
+          seller: {
+            fullName: staticProduct.sellerName,
+            phoneNumber: ""
+          }
+        });
+        return;
+      }
+
       const { data, error } = await supabase
         .from("products")
         .select("*, seller:users!products_seller_id_fkey(*)")
