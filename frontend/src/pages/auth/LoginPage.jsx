@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Field } from "../../components/forms/Field.jsx";
+import { ThemeToggle } from "../../components/ThemeToggle.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 const roleNames = {
@@ -33,6 +34,9 @@ export function LoginPage() {
 
   return (
     <main className="auth-page">
+      <div className="auth-theme-action">
+        <ThemeToggle />
+      </div>
       <form className="auth-form" onSubmit={handleSubmit}>
         <div className="auth-brand" aria-label="UNIVENDA">
           <div className="logo-mark" aria-hidden="true">

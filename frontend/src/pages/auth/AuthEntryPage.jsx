@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ThemeToggle } from "../../components/ThemeToggle.jsx";
 
 export function AuthEntryPage({ mode }) {
   const isLogin = mode === "login";
@@ -7,6 +8,9 @@ export function AuthEntryPage({ mode }) {
 
   return (
     <main className="auth-entry-page">
+      <div className="auth-theme-action">
+        <ThemeToggle />
+      </div>
       <div className="auth-entry-card">
         <div className="logo-mark" aria-hidden="true">
           U

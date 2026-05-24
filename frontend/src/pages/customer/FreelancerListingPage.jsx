@@ -13,32 +13,47 @@ const SKILL_GUIDANCE = {
   "Web Development": {
     requiredSkills: ["HTML, CSS, JavaScript", "Responsive layouts", "React basics", "APIs and forms"],
     tools: ["VS Code", "GitHub", "Chrome DevTools", "Figma"],
-    path: ["Build a personal page", "Recreate 2 landing pages", "Create a small React app", "Deploy a portfolio site"],
-    portfolio: ["College club website", "Product listing page", "Restaurant landing page", "Dashboard UI clone"]
+    roadmap: ["Build a personal page", "Recreate 2 landing pages", "Create a small React app", "Deploy a portfolio site"],
+    projects: ["College club website", "Product listing page", "Restaurant landing page", "Dashboard UI clone"],
+    opportunities: ["Landing pages for sellers", "Portfolio sites for students", "Event registration pages", "Small business catalog pages"],
+    pricing: ["Beginner: Rs 500-1,500 per page", "Intermediate: Rs 3,000-8,000 per site", "Charge extra for forms, hosting setup, or urgent delivery"],
+    resources: ["MDN Web Docs", "freeCodeCamp", "React.dev", "Frontend Mentor"]
   },
   "Graphic Design": {
     requiredSkills: ["Typography", "Color theory", "Layout systems", "Brand consistency"],
     tools: ["Canva", "Figma", "Adobe Photoshop", "Adobe Illustrator"],
-    path: ["Study 5 strong posters", "Design social posts", "Make logo variations", "Create a mini brand kit"],
-    portfolio: ["Instagram carousel", "Event poster", "Business card set", "Brand moodboard"]
+    roadmap: ["Study 5 strong posters", "Design social posts", "Make logo variations", "Create a mini brand kit"],
+    projects: ["Instagram carousel", "Event poster", "Business card set", "Brand moodboard"],
+    opportunities: ["Club event posters", "Seller product graphics", "Logo refreshes", "Social media post packs"],
+    pricing: ["Beginner: Rs 150-400 per post", "Poster packs: Rs 500-1,200", "Brand kits: Rs 1,500-4,000"],
+    resources: ["Canva Design School", "Figma Learn", "The Futur", "Adobe tutorials"]
   },
   "Video Editing": {
     requiredSkills: ["Story pacing", "Cuts and transitions", "Audio cleanup", "Caption design"],
     tools: ["CapCut", "Premiere Pro", "DaVinci Resolve", "Canva"],
-    path: ["Edit short reels", "Practice captions", "Create before/after edits", "Build a 30-second promo"],
-    portfolio: ["Product reel", "Event recap", "YouTube intro", "Educational short"]
+    roadmap: ["Edit short reels", "Practice captions", "Create before/after edits", "Build a 30-second promo"],
+    projects: ["Product reel", "Event recap", "YouTube intro", "Educational short"],
+    opportunities: ["Reels for student sellers", "Event recap edits", "Course explainers", "Product launch videos"],
+    pricing: ["Beginner: Rs 300-800 per short video", "Monthly reel packs: Rs 2,000-5,000", "Add-ons: subtitles, thumbnails, rush delivery"],
+    resources: ["CapCut tutorials", "DaVinci Resolve training", "Premiere Pro Learn", "YouTube Creator Academy"]
   },
   "UI/UX": {
     requiredSkills: ["User flows", "Wireframing", "Visual hierarchy", "Usability testing"],
     tools: ["Figma", "FigJam", "Notion", "Maze"],
-    path: ["Redesign one app screen", "Map a checkout flow", "Prototype a dashboard", "Test with 3 friends"],
-    portfolio: ["App onboarding", "Checkout redesign", "Student dashboard", "Case study with decisions"]
+    roadmap: ["Redesign one app screen", "Map a checkout flow", "Prototype a dashboard", "Test with 3 friends"],
+    projects: ["App onboarding", "Checkout redesign", "Student dashboard", "Case study with decisions"],
+    opportunities: ["App screen redesigns", "Clickable prototypes", "Landing page wireframes", "Usability audit reports"],
+    pricing: ["Beginner: Rs 700-1,500 per screen", "Prototype flows: Rs 2,500-6,000", "Offer audit + redesign bundles"],
+    resources: ["Figma Learn", "Nielsen Norman Group", "Laws of UX", "UX Collective"]
   },
   "Content Writing": {
     requiredSkills: ["Clear structure", "Research", "SEO basics", "Editing and tone"],
     tools: ["Google Docs", "Grammarly", "Notion", "Google Trends"],
-    path: ["Write daily summaries", "Create 3 blog drafts", "Rewrite product descriptions", "Pitch short articles"],
-    portfolio: ["Blog post set", "Product descriptions", "LinkedIn posts", "Email newsletter sample"]
+    roadmap: ["Write daily summaries", "Create 3 blog drafts", "Rewrite product descriptions", "Pitch short articles"],
+    projects: ["Blog post set", "Product descriptions", "LinkedIn posts", "Email newsletter sample"],
+    opportunities: ["Product descriptions", "Blog writing", "LinkedIn content", "Email announcements"],
+    pricing: ["Beginner: Rs 250-700 per short article", "Product copy packs: Rs 500-1,500", "Charge more for research-heavy topics"],
+    resources: ["Google Search Central", "HubSpot Blog", "Grammarly Handbook", "Copyblogger"]
   }
 };
 
@@ -241,8 +256,11 @@ export function FreelancerListingPage() {
               <div className="guidance-grid">
                 <GuidanceList title="Required skills" items={guidance.requiredSkills} />
                 <GuidanceList title="Recommended tools" items={guidance.tools} />
-                <GuidanceList title="Beginner learning path" items={guidance.path} />
-                <GuidanceList title="Portfolio suggestions" items={guidance.portfolio} />
+                <GuidanceList title="Beginner roadmap" items={guidance.roadmap} />
+                <GuidanceList title="Suggested projects" items={guidance.projects} />
+                <GuidanceList title="Freelance opportunities" items={guidance.opportunities} />
+                <GuidanceList title="Beginner pricing guidance" items={guidance.pricing} />
+                <GuidanceList title="Learning resources" items={guidance.resources} />
               </div>
             ) : (
               <p className="empty-state">No temporary guidance is available for that skill yet.</p>

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { ThemeToggle } from "../ThemeToggle.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 
 export function AppShell({ children, title }) {
@@ -24,6 +25,7 @@ export function AppShell({ children, title }) {
           {user?.role === "customer" ? <Link to="/customer/dashboard">Account</Link> : null}
         </nav>
         <div className="topbar-actions">
+          <ThemeToggle />
           {user ? (
             <>
               <span>{user.fullName}</span>
